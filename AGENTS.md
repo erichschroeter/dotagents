@@ -13,3 +13,5 @@
 - When you write a commit message, follow Conventional Commits convention.
 
 - If the prompt indicates that a bug is being fixed, don't write the fix right away. First write the test. Observe it failing. Then write the fix. And observe the test passing. 
+
+- Use design patterns when possible since they make reading code easier.
