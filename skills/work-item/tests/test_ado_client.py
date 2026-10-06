@@ -169,5 +169,24 @@ class TestFindingsComment(unittest.TestCase):
         mock_patch.assert_not_called()
 
 
+
+class TestCommentFormat(unittest.TestCase):
+    @patch("ado_client._run_az")
+    def test_writes_request_markdown_format(self, mock_run):
+        mock_run.return_value = _completed({"id": 1})
+        ado_client.create_findings_comment("42", "text", pat="x")
+        ado_client.patch_findings_comment("42", "1", "text", pat="x")
+        for call in mock_run.call_args_list:
+            args = call[0][0]
+            self.assertIn("--query-parameters", args)
+            self.assertEqual(args[args.index("--query-parameters") + 1], "format=markdown")
+
+    @patch("ado_client._run_az")
+    def test_get_has_no_format_parameter(self, mock_run):
+        mock_run.return_value = _completed({"comments": []})
+        ado_client.get_comments("42", pat="x")
+        self.assertNotIn("--query-parameters", mock_run.call_args[0][0])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -176,6 +176,10 @@ def _run_invoke(
         "--api-version", "7.0-preview",  # no ".3" suffix -- az's parser rejects it (WI-003)
         "--http-method", http_method,
     ]
+    if body is not None:
+        # Without format=markdown ADO stores the text as HTML and the markdown
+        # renders as one unformatted paragraph.
+        args += ["--query-parameters", "format=markdown"]
     # `az devops invoke --in-file` takes a real file path, not stdin (confirmed
     # via `az devops invoke -h`), so a request body is written to a temp file.
     if body is None:
